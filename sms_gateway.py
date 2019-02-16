@@ -1,28 +1,31 @@
-exports.handler = async (event) => {
-    // Load the AWS SDK for Node.js
-    
-   var AWS = require('aws-sdk');
-AWS.config.region = 'us-east-1';
-var sns = new AWS.SNS();
+import json
+import boto3 
+from boto3.dynamodb.conditions import Key, Attr
 
-var params = {
-  Message: 'STRING_VALUE', /* required */
-  MessageAttributes: {
-    '<String>': {
-      DataType: 'STRING_VALUE', /* required */
-      BinaryValue: new Buffer('...') || 'STRING_VALUE' /* Strings will be Base-64 encoded on your behalf */,
-      StringValue: 'STRING_VALUE'
-    },
-    /* '<String>': ... */
-  },
-  MessageStructure: 'STRING_VALUE',
-  PhoneNumber: '+918105871092',
-  Subject: 'STRING_VALUE',
-  TargetArn: '+918105871092',
-  TopicArn: '+918105871092'
-};
-sns.publish(params, function(err, data) {
-  if (err) console.log(err, err.stack); // an error occurred
-  else     console.log(data);           // successful response
-});
-};
+def lambda_handler(event, context):
+    
+    client = boto3.client(
+    "sns",
+    aws_access_key_id="AKIAJA6IHVJMEYLC5TRA",
+    aws_secret_access_key="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",
+    region_name="us-east-1"
+    )
+    
+    phone_number = event['number'];
+    
+    client.publish(
+                 PhoneNumber=phone_number,
+                 Message=event['message'],
+                    MessageAttributes={
+            'AWS.SNS.SMS.SenderID': {
+                'DataType': 'String',
+                'StringValue': 'SENDERID'
+            },
+            'AWS.SNS.SMS.SMSType': {
+                'DataType': 'String',
+                'StringValue': 'Transactional'
+             }
+               }
+            )  
+    return "Data with message is succesfully sent to required person."
+    
