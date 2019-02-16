@@ -6,8 +6,8 @@ def lambda_handler(event, context):
     
     client = boto3.client(
     "sns",
-    aws_access_key_id="AKIAJA6IHVJMEYLC5TRA",
-    aws_secret_access_key="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",
+    aws_access_key_id="--access-key--",
+    aws_secret_access_key="--secrete--",
     region_name="us-east-1"
     )
     
